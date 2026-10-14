@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors')
 const dotenv= require('dotenv');
-const { MongoClient, ServerApiVersion} = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId} = require('mongodb');
 dotenv.config();
 
 const app = express();
@@ -44,6 +44,11 @@ async function run() {
     app.get('/explore-rooms', async (req, res) => {
         const rooms = await roomsCollection.find().sort({_id:-1}).limit(6).toArray();
         res.send(rooms);
+    })
+    app.get('/rooms/:id', async (req, res) => {
+        const id = req.params.id;
+        const room = await roomsCollection.findOne({_id: new ObjectId(id)});
+        res.send(room);
     })
 
     
